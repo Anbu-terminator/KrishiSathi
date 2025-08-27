@@ -63,7 +63,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       });
     } catch (err) {
       console.error("OpenRouter chat error:", err);
-      return res.json({ response: customFallbackResponse(query) });
+      return res.status(429).json({
+        response: process.env.OPENROUTER_API_KEY
+          ? "Apologies, our AI systems are busy. " + customFallbackResponse(query)
+          : "Please add your OpenRouter API key for reliable access. " + customFallbackResponse(query)
+      });
     }
   });
 
